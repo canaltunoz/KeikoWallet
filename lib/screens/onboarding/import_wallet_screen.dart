@@ -141,9 +141,13 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
   }
 
   Widget _buildMnemonicImport() {
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
+
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        padding: EdgeInsets.all(screenWidth * 0.04), // %4 of screen width
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -153,7 +157,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: screenHeight * 0.01), // %1 of screen height
 
             Text(
               'Enter your 12 or 24-word seed phrase to restore your wallet.',
@@ -161,7 +165,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: screenHeight * 0.03), // %3 of screen height
 
             Expanded(
               child: TextField(
@@ -176,28 +180,31 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
                       AppConstants.defaultBorderRadius,
                     ),
                   ),
-                  contentPadding: const EdgeInsets.all(16),
+                  contentPadding: EdgeInsets.all(
+                    screenWidth * 0.04,
+                  ), // %4 of screen width
                 ),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.02), // %2 of screen height
 
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(screenWidth * 0.04), // %4 of screen width
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(
-                  AppConstants.defaultBorderRadius,
+                  screenWidth * 0.03, // %3 of screen width
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.info_outline,
+                    size: screenWidth * 0.06, // %6 of screen width
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: screenWidth * 0.03), // %3 of screen width
                   Expanded(
                     child: Text(
                       'Separate each word with a space. Make sure the words are in the correct order.',
@@ -229,9 +236,13 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
   }
 
   Widget _buildPrivateKeyImport() {
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
+
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        padding: EdgeInsets.all(screenWidth * 0.04), // %4 of screen width
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -241,7 +252,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: screenHeight * 0.01), // %1 of screen height
 
             Text(
               'Enter your private key to import your wallet.',
@@ -249,7 +260,7 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: screenHeight * 0.03), // %3 of screen height
 
             TextField(
               controller: _privateKeyController,
@@ -261,27 +272,30 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
                     AppConstants.defaultBorderRadius,
                   ),
                 ),
-                contentPadding: const EdgeInsets.all(16),
+                contentPadding: EdgeInsets.all(
+                  screenWidth * 0.04,
+                ), // %4 of screen width
               ),
               style: Theme.of(context).textTheme.bodyLarge,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.02), // %2 of screen height
 
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(screenWidth * 0.04), // %4 of screen width
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.errorContainer,
                 borderRadius: BorderRadius.circular(
-                  AppConstants.defaultBorderRadius,
+                  screenWidth * 0.03, // %3 of screen width
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.warning,
+                    size: screenWidth * 0.06, // %6 of screen width
                     color: Theme.of(context).colorScheme.error,
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: screenWidth * 0.03), // %3 of screen width
                   Expanded(
                     child: Text(
                       'Never share your private key with anyone. Keep it secure and private.',
@@ -293,17 +307,18 @@ class _ImportWalletScreenState extends State<ImportWalletScreen>
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: screenHeight * 0.03), // %3 of screen height
 
             SizedBox(
               width: double.infinity,
+              height: screenHeight * 0.07, // %7 of screen height
               child: ElevatedButton(
                 onPressed: _isImporting ? null : _importFromPrivateKey,
                 child: _isImporting
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                    ? SizedBox(
+                        height: screenWidth * 0.05, // %5 of screen width
+                        width: screenWidth * 0.05, // %5 of screen width
+                        child: const CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Text('Import Wallet'),
               ),

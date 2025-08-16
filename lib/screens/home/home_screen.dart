@@ -24,7 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _copyAddress() {
     final walletProvider = Provider.of<WalletProvider>(context, listen: false);
     if (walletProvider.currentWallet != null) {
-      Clipboard.setData(ClipboardData(text: walletProvider.currentWallet!.address));
+      Clipboard.setData(
+        ClipboardData(text: walletProvider.currentWallet!.address),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Address copied to clipboard'),
@@ -56,9 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer<WalletProvider>(
         builder: (context, walletProvider, child) {
           if (walletProvider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (walletProvider.error != null) {
@@ -90,24 +90,30 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           if (!walletProvider.hasWallet) {
-            return const Center(
-              child: Text('No wallet found'),
-            );
+            return const Center(child: Text('No wallet found'));
           }
+
+          final screenSize = MediaQuery.of(context).size;
+          final screenWidth = screenSize.width;
+          final screenHeight = screenSize.height;
 
           return RefreshIndicator(
             onRefresh: () => walletProvider.refreshBalances(),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(AppConstants.defaultPadding),
+              padding: EdgeInsets.all(screenWidth * 0.04), // %4 of screen width
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildWalletCard(walletProvider),
-                  const SizedBox(height: 24),
-                  _buildBalanceSection(walletProvider),
-                  const SizedBox(height: 24),
-                  _buildActionButtons(),
+                  _buildWalletCard(walletProvider, screenWidth, screenHeight),
+                  SizedBox(height: screenHeight * 0.03), // %3 of screen height
+                  _buildBalanceSection(
+                    walletProvider,
+                    screenWidth,
+                    screenHeight,
+                  ),
+                  SizedBox(height: screenHeight * 0.03), // %3 of screen height
+                  _buildActionButtons(screenWidth, screenHeight),
                 ],
               ),
             ),
@@ -117,50 +123,62 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildWalletCard(WalletProvider walletProvider) {
+  Widget _buildWalletCard(
+    WalletProvider walletProvider,
+    double screenWidth,
+    double screenHeight,
+  ) {
     final wallet = walletProvider.currentWallet!;
-    
+
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(screenWidth * 0.04), // %4 of screen width
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 CircleAvatar(
+                  radius: screenWidth * 0.05, // %5 of screen width
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(
                     Icons.account_balance_wallet,
+                    size: screenWidth * 0.06, // %6 of screen width
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: screenWidth * 0.03), // %3 of screen width
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         wallet.name ?? 'My Wallet',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(
+                        height: screenHeight * 0.005,
+                      ), // %0.5 of screen height
                       Row(
                         children: [
                           Text(
                             _formatAddress(wallet.address),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(
+                            width: screenWidth * 0.02,
+                          ), // %2 of screen width
                           GestureDetector(
                             onTap: _copyAddress,
                             child: Icon(
                               Icons.copy,
-                              size: 16,
+                              size: screenWidth * 0.04, // %4 of screen width
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
@@ -177,22 +195,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildBalanceSection(WalletProvider walletProvider) {
+  Widget _buildBalanceSection(
+    WalletProvider walletProvider,
+    double screenWidth,
+    double screenHeight,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Balances',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 16),
-        
+        SizedBox(height: screenHeight * 0.02), // %2 of screen height
+
         if (walletProvider.tokenBalances.isEmpty)
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(screenWidth * 0.04), // %4 of screen width
               child: Center(
                 child: Text(
                   'No tokens found',
@@ -208,7 +230,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return Card(
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
                   child: Text(
                     tokenBalance.token.symbol.substring(0, 1),
                     style: TextStyle(
@@ -240,12 +264,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             );
-          }).toList(),
+          }),
       ],
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(double screenWidth, double screenHeight) {
     return Row(
       children: [
         Expanded(
@@ -253,17 +277,23 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               // TODO: Navigate to send screen
             },
-            icon: const Icon(Icons.send),
+            icon: Icon(
+              Icons.send,
+              size: screenWidth * 0.05,
+            ), // %5 of screen width
             label: const Text('Send'),
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: screenWidth * 0.04), // %4 of screen width
         Expanded(
           child: OutlinedButton.icon(
             onPressed: () {
               // TODO: Navigate to receive screen
             },
-            icon: const Icon(Icons.qr_code),
+            icon: Icon(
+              Icons.qr_code,
+              size: screenWidth * 0.05,
+            ), // %5 of screen width
             label: const Text('Receive'),
           ),
         ),
