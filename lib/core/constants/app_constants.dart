@@ -4,6 +4,7 @@ class AppConstants {
   // App Info
   static String get appName => EnvService.appName;
   static String get appVersion => EnvService.appVersion;
+  static String get buildNumber => EnvService.buildNumber;
 
   // Moralis Configuration
   static String get moralisApiKey => EnvService.moralisApiKey;

@@ -6,7 +6,7 @@ class EnvService {
   /// Initialize environment variables
   static Future<void> initialize() async {
     if (_isInitialized) return;
-    
+
     try {
       await dotenv.load(fileName: '.env');
       _isInitialized = true;
@@ -67,6 +67,12 @@ class EnvService {
     return dotenv.env['APP_VERSION'] ?? '1.0.0';
   }
 
+  /// Get build number
+  static String get buildNumber {
+    _ensureInitialized();
+    return dotenv.env['BUILD_NUMBER'] ?? '1';
+  }
+
   /// Check if debug mode is enabled
   static bool get isDebugMode {
     _ensureInitialized();
@@ -77,7 +83,9 @@ class EnvService {
   /// Ensure environment is initialized
   static void _ensureInitialized() {
     if (!_isInitialized) {
-      throw Exception('Environment service not initialized. Call EnvService.initialize() first.');
+      throw Exception(
+        'Environment service not initialized. Call EnvService.initialize() first.',
+      );
     }
   }
 
@@ -93,19 +101,21 @@ class EnvService {
   /// Validate required environment variables
   static void validateRequiredVars() {
     _ensureInitialized();
-    
+
     final requiredVars = ['MORALIS_API_KEY'];
     final missingVars = <String>[];
-    
+
     for (final varName in requiredVars) {
       final value = dotenv.env[varName];
       if (value == null || value.isEmpty) {
         missingVars.add(varName);
       }
     }
-    
+
     if (missingVars.isNotEmpty) {
-      throw Exception('Missing required environment variables: ${missingVars.join(', ')}');
+      throw Exception(
+        'Missing required environment variables: ${missingVars.join(', ')}',
+      );
     }
   }
 }

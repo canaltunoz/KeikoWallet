@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // TODO: Navigate to settings
+              Navigator.pushNamed(context, '/settings');
             },
           ),
         ],

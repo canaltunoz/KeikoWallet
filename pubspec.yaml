@@ -44,6 +44,17 @@ dependencies:
   local_auth: ^2.3.0
   cryptography: ^2.7.0
 
+  # Sodium Crypto (Argon2id + XChaCha20-Poly1305)
+  sodium: ^2.2.1
+  sodium_libs: ^2.2.1+6
+
+  # Database
+  sqflite: ^2.3.3
+  path: ^1.9.0
+
+  # Google Sign-In
+  google_sign_in: ^6.2.1
+
   # QR Code
   qr_flutter: ^4.1.0
   mobile_scanner: ^5.2.3
@@ -92,6 +103,7 @@ flutter:
   # Assets
   assets:
     - .env
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
